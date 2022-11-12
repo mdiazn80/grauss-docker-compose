@@ -11,6 +11,8 @@ services:
     container_name: grauss
     ports: 
       - '8000:8000'
+    depends_on:
+      - postgres-grafana
     networks:
       - grauss-network
 
