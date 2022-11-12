@@ -1,0 +1,130 @@
+version: '3.7'
+
+services: 
+
+  grauss: 
+    build: 
+      context: grauss/
+      args:
+        PYTHON_VERSION: $PYTHON_VERSION
+    hostname: grauss
+    container_name: grauss
+    ports: 
+      - '8000:8000'
+    networks:
+      - grauss-network
+
+  prometheus:
+    build:
+      context: prometheus/
+      args:
+        PROMETHEUS_VERSION: $PROMETHEUS_VERSION
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - type: bind
+        source: ./prometheus/config/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+        read_only: true
+      - type: bind
+        source: ./data/prometheus
+        target: /prometheus
+    networks:
+      - grauss-network
+
+  alertmanager:
+    build:
+      context: alertmanager/
+      args:
+        ALERTMANAGER_VERSION: $ALERTMANAGER_VERSION
+    hostname: alertmanager
+    container_name: alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - type: bind
+        source: ./alertmanager/config/alertmanager.yml
+        target: /etc/alertmanager/alertmanager.yml
+        read_only: true
+      - type: bind
+        source: ./data/alertmanager
+        target: /alertmanager
+    networks:
+      - grauss-network
+
+  grafana:
+    build:
+      context: grafana/
+      args:
+        GRAFANA_VERSION: $GRAFANA_VERSION
+    hostname: grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - type: bind
+        source: ./data/grafana
+        target: /var/lib/grafana
+      - type: bind
+        source: ./grafana/config/grafana.ini
+        target: /etc/grafana/grafana.ini
+      - type: bind
+        source: ./grafana/dashboards
+        target: /etc/grafana/provisioning/dashboards
+      - type: bind
+        source: ./grafana/datasources
+        target: /etc/grafana/provisioning/datasources
+    depends_on:
+      - postgres-grafana
+    networks:
+      - grauss-network
+
+  postgres-grauss:
+    build:
+      context: postgres/
+      args:
+        POSTGRES_VERSION: ${POSTGRES_VERSION}
+    hostname: postgres-grauss
+    container_name: postgres-grauss
+    ports:
+      - 5432:5432
+    volumes: 
+      - type: volume
+        source: postgres-grauss
+        target: /var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: graussdb
+      POSTGRES_USER: graussuser
+      POSTGRES_PASSWORD: grausspasswd
+    networks:
+      - grauss-network
+
+  postgres-grafana:
+    build:
+      context: postgres/
+      args:
+        POSTGRES_VERSION: ${POSTGRES_VERSION}
+    hostname: postgres-grafana
+    container_name: postgres-grafana
+    ports:
+      - 5433:5432
+    volumes: 
+      - type: volume
+        source: postgres-grafana
+        target: /var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: grafanadb
+      POSTGRES_USER: grafanauser
+      POSTGRES_PASSWORD: grafanapasswd
+    networks:
+      - grauss-network
+
+volumes:
+  postgres-grafana:
+  postgres-grauss:
+
+networks:
+  grauss-network:
+    driver: bridge

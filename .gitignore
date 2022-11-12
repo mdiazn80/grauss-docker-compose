@@ -1,0 +1,7 @@
+.DS_Store
+data/*/*
+!data/*/.gitkeep
+__pycache__
+__init__.py
+db.sqlite3
+venv
