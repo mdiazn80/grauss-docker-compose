@@ -18,10 +18,6 @@ pip install -r grauss/requirements.txt
 ```
 
 ```sh
-docker compose -f compose-dev.yml up -d
-```
-
-```sh
 python grauss/manage.py migrate
 python grauss/manage.py createsuperuser
 python grauss/manage.py runserver

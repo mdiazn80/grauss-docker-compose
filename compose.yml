@@ -2,18 +2,6 @@ version: '3.7'
 
 services: 
 
-  grauss: 
-    build: 
-      context: grauss/
-      args:
-        PYTHON_VERSION: $PYTHON_VERSION
-    hostname: grauss
-    container_name: grauss
-    ports: 
-      - '8000:8000'
-    networks:
-      - grauss-network
-
   prometheus:
     build:
       context: prometheus/
