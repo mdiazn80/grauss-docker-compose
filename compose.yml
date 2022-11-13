@@ -78,6 +78,7 @@ services:
       - type: bind
         source: ./grafana/datasources
         target: /etc/grafana/provisioning/datasources
+    command: ["./wait-for-it.sh", "postgres-grafana:5432", "--", "run.sh"]
     depends_on:
       - postgres-grafana
     networks:
@@ -137,8 +138,8 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - type: bind
-        source: ./data/mongodb
+      - type: volume
+        source: mongodb
         target: /data/db
       - type: bind
         source: ./mongodb/scripts/
@@ -150,6 +151,7 @@ services:
 volumes:
   postgres-grafana:
   postgres-grauss:
+  mongodb:
 
 networks:
   grauss-network:
