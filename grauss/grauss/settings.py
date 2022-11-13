@@ -90,6 +90,14 @@ DATABASES = {
         'PASSWORD': 'grausspasswd',
         'HOST': 'postgres-grauss',
         'PORT': '5432',
+    },
+    'docu': {
+        'ENGINE': 'djongo',
+        'NAME': 'mongodb',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb+srv://grauss_user:grauss_pass@mongodb/graussdocu?retryWrites=true&w=majority'
+        }  
     }
 }
 

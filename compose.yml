@@ -133,12 +133,17 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: graussdocu
     ports:
       - 27017:27017
     volumes:
       - type: bind
         source: ./data/mongodb
         target: /data/db
+      - type: bind
+        source: ./mongodb/scripts/
+        target: /docker-entrypoint-initdb.d/
+        read_only: true
     networks:
       - grauss-network
 
