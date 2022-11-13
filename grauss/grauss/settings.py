@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-15w#fif^g)0yga=0anz7ge^ek)u@f%h$1*l85t7hiiwdpmqazf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["grauss","localhost"]
+ALLOWED_HOSTS = ["grauss","localhost","127.0.0.1"]
 
 
 # Application definition
@@ -63,7 +63,7 @@ ROOT_URLCONF = 'grauss.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,10 +93,10 @@ DATABASES = {
     },
     'docu': {
         'ENGINE': 'djongo',
-        'NAME': 'mongodb',
+        'NAME': 'graussdocu',
         'ENFORCE_SCHEMA': False,
         'CLIENT': {
-            'host': 'mongodb+srv://grauss_user:grauss_pass@mongodb/graussdocu?retryWrites=true&w=majority'
+            'host': 'mongodb://grauss_user:grauss_pass@mongodb:27017/graussdocu?retryWrites=true&w=majority'
         }  
     }
 }
@@ -136,9 +136,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+#STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# Media Files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

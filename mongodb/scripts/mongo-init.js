@@ -3,8 +3,12 @@ db.createUser({
     pwd: 'grauss_pass',
     roles: [
       {
-        role: 'dbOwner',
+        role: 'readWrite',
         db: 'graussdocu',
       },
     ],
   });
+
+db = new Mongo().getDB("graussdocu");
+
+db.createCollection('status', { capped: false });

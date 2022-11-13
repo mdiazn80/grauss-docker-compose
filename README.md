@@ -23,6 +23,8 @@ python grauss/manage.py createsuperuser
 python grauss/manage.py runserver
 ```
 
+ docker compose up -d mongodb postgres-grauss
+
 ### Production
 
 ```sh
