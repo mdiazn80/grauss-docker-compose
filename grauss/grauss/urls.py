@@ -15,14 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.schemas import get_schema_view
 from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('django_prometheus.urls')),
+    path('prometheus', include('django_prometheus.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('swagger-ui/', TemplateView.as_view(
+    path('openapi', get_schema_view(
+        title="Your Project",
+        description="API for all things …",
+        version="1.0.0"
+    ), name='openapi-schema'),
+    path('swagger', TemplateView.as_view(
         template_name='swagger-ui.html',
-        extra_context={'schema_url':'openapi-schema'}
-    ), name='swagger-ui'),
+        extra_context={'schema_url':'api_schema'}
+        ), name='swagger-ui'),
 ]

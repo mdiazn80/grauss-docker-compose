@@ -1,0 +1,33 @@
+version: 3.0
+bind: 0.0.0.0:9412
+metricsPath: /metrics
+log:
+  encoding: json
+  level: debug
+  development: true
+  disableCaller: false
+global:
+  queryTimeout: "10s"
+  maxConnection: 3
+  defaultCache: 0
+#servers:
+#- name: mongodb-query-exporter
+#  uri: 'mongodb://root:example@mongodb:27017'
+aggregations:
+- database: graussdocu
+  collection: status
+  servers: [] #Can also be empty, if empty the metric will be used for every server defined
+  metrics:
+  - name: grauss_simplevalue_total
+    type: gauge #Can also be empty, the default is gauge
+    help: 'Simple gauge metric'
+    value: test
+    overrideEmpty: true # if an empty result set is returned..
+    emptyValue: 0       # create a metric with value 0
+    labels: []
+    constLabels: []
+  mode: pull
+  pipeline: |
+    [
+      {"$count":"test"}
+    ]

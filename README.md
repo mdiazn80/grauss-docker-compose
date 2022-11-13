@@ -34,3 +34,7 @@ docker compose up -d --force-recreate --build
 ```sh
 docker compose down 
 ```
+
+## Referencias
+
+* https://github.com/raffis/mongodb-query-exporter

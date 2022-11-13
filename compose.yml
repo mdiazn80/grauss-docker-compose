@@ -23,8 +23,8 @@ services:
         PROMETHEUS_VERSION: $PROMETHEUS_VERSION
     hostname: prometheus
     container_name: prometheus
-#    ports:
-#      - "9090:9090"
+    ports:
+      - "9090:9090"
     volumes:
       - type: bind
         source: ./prometheus/config/prometheus.yml
@@ -144,6 +144,25 @@ services:
       - type: bind
         source: ./mongodb/scripts/
         target: /docker-entrypoint-initdb.d/
+        read_only: true
+    networks:
+      - grauss-network
+
+  mongodb-query-exporter:
+    build:
+      context: mongodb-query-exporter/
+      args:
+        MONGODB_QUERY_EXPORTER_VERSION: $MONGODB_QUERY_EXPORTER_VERSION
+    hostname: mongodb-query-exporter
+    container_name: mongodb-query-exporter
+    environment:
+      MDBEXPORTER_MONGODB_URI: 'mongodb://mongodb_query_exporter:secret@mongodb:27017/'
+    ports:
+      - 9412:9412
+    volumes:
+      - type: bind
+        source: ./mongodb-query-exporter/config/config.yml
+        target: /etc/mongodb-query-exporter/config.yaml
         read_only: true
     networks:
       - grauss-network

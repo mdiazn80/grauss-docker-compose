@@ -37,3 +37,12 @@ scrape_configs:
     static_configs:
       - targets: 
         - "grauss:8000"
+
+  - job_name: "mongodb-query-exporter"
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: 
+        - "mongodb-query-exporter:9412"
