@@ -23,8 +23,8 @@ services:
         PROMETHEUS_VERSION: $PROMETHEUS_VERSION
     hostname: prometheus
     container_name: prometheus
-    ports:
-      - "9090:9090"
+#    ports:
+#      - "9090:9090"
     volumes:
       - type: bind
         source: ./prometheus/config/prometheus.yml
@@ -43,8 +43,8 @@ services:
         ALERTMANAGER_VERSION: $ALERTMANAGER_VERSION
     hostname: alertmanager
     container_name: alertmanager
-    ports:
-      - "9093:9093"
+#    ports:
+#      - "9093:9093"
     volumes:
       - type: bind
         source: ./alertmanager/config/alertmanager.yml
@@ -110,8 +110,8 @@ services:
         POSTGRES_VERSION: ${POSTGRES_VERSION}
     hostname: postgres-grafana
     container_name: postgres-grafana
-    ports:
-      - 5433:5432
+#    ports:
+#      - 5433:5432
     volumes: 
       - type: volume
         source: postgres-grafana
@@ -120,6 +120,25 @@ services:
       POSTGRES_DB: grafanadb
       POSTGRES_USER: grafanauser
       POSTGRES_PASSWORD: grafanapasswd
+    networks:
+      - grauss-network
+
+  mongodb:
+    build:
+      context: mongodb/
+      args:
+        MONGODB_VERSION: $MONGODB_VERSION
+    hostname: mongodb
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    volumes:
+      - type: bind
+        source: ./data/mongodb
+        target: /data/db
     networks:
       - grauss-network
 
